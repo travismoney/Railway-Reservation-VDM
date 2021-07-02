@@ -7,12 +7,7 @@
 --3. Ticket Cancellation
 --4. Proof Of Reservation (Printing Receipt)
 --Project Description: Simple VDM Specification for railway reservation system allowing customers to book train
---Lecturer: Associate Professor Dr. Edwin ak Mit
---Group Members:
---Ethar Helmi Ali Alarashi - 60086 - 60086@siswa.unimas.my
---Cyhren Thruvarasu - 55771 - 55771@siswa.unimas.my
---Tahmid Muhtashim Nafy - 64545 - 64545@siswa.unimas.my
---Travis Iran Money - 62823 - 62823@siswa.unimas.my
+--Travis Iran Money
 ---------------------------------------------------------------------------------------------------------------
 class Booking
 
