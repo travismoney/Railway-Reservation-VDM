@@ -1,0 +1,209 @@
+
+---------------------------------------------------------------------------------------------------------------
+-----------------------------------------Railway Reservation System--------------------------------------------
+--Objectives
+--1. View train timing details to customer regarding destination
+--2. Make reservation and billing
+--3. Ticket Cancellation
+--4. Proof Of Reservation (Printing Receipt)
+--Project Description: Simple VDM Specification for railway reservation system allowing customers to book train
+--Lecturer: Associate Professor Dr. Edwin ak Mit
+--Group Members:
+--Ethar Helmi Ali Alarashi - 60086 - 60086@siswa.unimas.my
+--Cyhren Thruvarasu - 55771 - 55771@siswa.unimas.my
+--Tahmid Muhtashim Nafy - 64545 - 64545@siswa.unimas.my
+--Travis Iran Money - 62823 - 62823@siswa.unimas.my
+---------------------------------------------------------------------------------------------------------------
+class Booking
+
+instance variables
+public TicketInformation:ticketInfo;
+public TrainInformation:TrainSchedule;
+public ArrivalLocation: seq of char;
+public DestinationLocation: seq of char;
+public Date:date;
+public Time:time;
+public TotalTicketPrice:nat1;
+public TotalAmountPaid:nat1;
+public PaymentStatus:paymentStatus;
+public AmountAfterCancellation:nat1;
+public CustName:seq of char;
+
+types
+public paymentStatus = <Payment_Success> | <Payment_Failed>;
+public time=nat1*nat1;
+public day=nat1
+inv dy == dy >= 1 and dy <= 31;
+public month=nat1
+inv mn == mn >= 1 and mn <= 12;
+public year=nat1;
+public date=day*month*year;
+public ticketNo=seq of char*nat1;
+public seatNumber=seq of char*nat1;
+public ticketInfo::TicketNo:ticketNo
+		   CustomerName:seq of char
+		   ALocation:seq of char
+		   DLocation:seq of char
+		   BookingDate:date
+		   BookingTime:time
+		   SeatNumber:seatNumber
+		   Quantity:nat1
+		   AmountPaid:nat1;
+
+public TrainSchedule::TrainID:nat1
+       		      TrainName:seq of char
+	              TotalSeats:nat1
+                      Day:day
+	              Month:month
+	              Year:year
+                      Hour:nat1
+	              Min:nat1
+                      ArrivalLocation:seq of char
+                      DestinationLocation:seq of char;		    
+operations
+
+--View Schedule
+public ViewTrainSchedule1:() ==> TrainSchedule
+	   ViewTrainSchedule1()==
+	   (	
+
+		TrainInformation:=mk_TrainSchedule(01,"KTM Train 1 KL - SG",200,25,11,2020,14,30,"Kuala Lumpur","Singapore");
+		return TrainInformation;
+	   );
+
+public ViewTrainSchedule2:() ==> TrainSchedule
+	   ViewTrainSchedule2()==
+	   (	
+
+		TrainInformation:=mk_TrainSchedule(02,"KTM Train 2 KL - PEN",200,28,11,2020,20,30,"Kuala Lumpur","Penang");
+		return TrainInformation;
+	   );
+
+public ViewTrainSchedule3:() ==> TrainSchedule
+	   ViewTrainSchedule3()==
+	   (	
+
+		TrainInformation:=mk_TrainSchedule(03,"KTM Train 1 KL - IPH",200,10,12,2020,23,30,"Kuala Lumpur","Ipoh");
+		return TrainInformation;
+	   );
+
+
+--Make Payment
+public MakePayment:nat1*nat1==> paymentStatus
+       MakePayment(TOTALTICKETPRICE,TOTALAMOUNTPAID) ==
+       (
+	TotalTicketPrice:=TOTALTICKETPRICE;
+	TotalAmountPaid:=TOTALAMOUNTPAID;
+	
+	if TotalAmountPaid >= TotalTicketPrice
+	then PaymentStatus := <Payment_Success>;
+	if TotalAmountPaid < TotalTicketPrice
+	then PaymentStatus := <Payment_Failed>;
+	return PaymentStatus;
+	);
+
+
+--Make Booking
+public MakeTicketReservation:seq of char*date*time*seq of char*seq of char ==> paymentStatus
+       MakeTicketReservation(CUSTNAME,DATE,TIME,Location,Destination)==
+       (CustName:=CUSTNAME;
+	Date:=DATE;
+	Time:=TIME;
+	ArrivalLocation:=Location;
+	DestinationLocation:=Destination;
+	MakePayment(TotalTicketPrice,TotalAmountPaid);
+	);
+
+--Print Receipt
+public PrintReceipt:ticketNo*seq of char*seq of char*seq of char*date*time*seatNumber*nat1*nat1==> ticketInfo
+       PrintReceipt(TicketNumber,CustomerName,ALocation,DLocation,BookingDate,BookingTime,SeatNumber,Qty,PaidAmount)==
+       (	
+		TicketInformation:=mk_ticketInfo(TicketNumber,CustomerName,ALocation,DLocation,BookingDate,BookingTime,SeatNumber,Qty,PaidAmount);
+		return TicketInformation;
+	);
+
+
+--Ticket Cancellation 
+public TicketCancellation:nat1==>nat1
+       TicketCancellation(TOTALTICKETPRICE)==
+	   (
+       	   TotalAmountPaid:=TOTALTICKETPRICE;
+           AmountAfterCancellation:=TotalAmountPaid/2;
+           return AmountAfterCancellation;
+	   );
+	   
+end Booking
+
+
+
+class Train
+
+instance variables
+
+public Fare:TrainFare;
+public Qty:nat1;
+public TotalFarePrice:TrainFare;
+public TravelLocation:travelLocation;
+public NumberOfSeats:nat1;
+public RemainingSeats:nat1;
+
+types
+public travelLocation = <KL_to_Singapore> | <KL_to_Penang> | <KL_to_Ipoh>;
+public TrainFare=nat1;
+
+operations
+
+--Get Destination Price Fare	   
+public GetDestinationPriceFare:travelLocation ==> TrainFare
+       GetDestinationPriceFare(TravelDestination)==
+       (
+	   
+	   	if TravelDestination = <KL_to_Singapore> then
+		(
+		    TravelLocation:=TravelDestination;
+			return 200
+		);
+
+		if TravelDestination = <KL_to_Penang> then
+		(
+		    TravelLocation:=TravelDestination;
+			return 150
+		);
+
+		if TravelDestination = <KL_to_Ipoh> then
+		(   
+		    TravelLocation:=TravelDestination;
+			return 125
+		);
+
+		return 0
+        
+       );
+
+--Get Available Seats   
+public GetSeatsAvailability:nat1*nat1 ==> nat1
+	   GetSeatsAvailability(TotalSeats,TotalReservation) ==
+	   (
+	       NumberOfSeats:=TotalSeats;
+		   Qty:=TotalReservation;
+		   RemainingSeats:=NumberOfSeats-Qty;
+		   return RemainingSeats;
+	   );	  
+
+--Get Total Fare Pricing
+public GetTotalFarePrice:nat1*nat1 ==> nat1
+       GetTotalFarePrice(FarePrice,TicketQuantity)==
+	   (
+	       	   Fare:=FarePrice;
+		   Qty:=TicketQuantity;
+		   TotalFarePrice:=Fare*Qty;
+		   return TotalFarePrice;
+	   );
+
+end Train
+
+
+
+
+
+----------------------------------------------------------------------

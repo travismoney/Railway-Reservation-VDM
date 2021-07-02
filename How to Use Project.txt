@@ -1,0 +1,57 @@
+--- Booking ---
+Initialize
+create a := new Booking()
+
+Viewing Train Schedule
+Viewing Train Schedule 1 -> Kuala Lumpur to Singapore
+print a.ViewTrainSchedule1()
+
+Viewing Train Schedule 2 -> Kuala Lumpur to Penang
+print a.ViewTrainSchedule2:()
+
+Viewing Train Schedule 3 -> Kuala Lumpur to Ipoh
+print a.ViewTrainSchedule3:()
+
+
+Making Ticket Reservation
+print a.MakeTicketReservation(CUSTNAME,DATE,TIME,Location,Destination)
+Example : print a.MakeTicketReservation("Travis",121220,2030,"Kuala Lumpur","Singapore")
+
+
+Making Payment
+print a.MakePayment(TOTALTICKETPRICE,TOTALAMOUNTPAID) 
+Example 1 Case Success : print a.MakePayment(400,400) 
+Returns : <Payment_Sucess>
+Example 2 Case Failed : print a.MakePayment(400,200)
+Returns : <Payment_Failed>
+
+
+Printing Receipt
+print a.PrintReceipt(TicketNumber,CustomerName,ALocation,DLocation,BookingDate,BookingTime,SeatNumber,Qty,PaidAmount)
+Example : a.PrintReceipt("TI01","Travis","Kuala Lumpur","Singapore","20112020,2030,A12,1,200)
+
+Cancelling Ticket by inputing Total Ticket Paid Amount Paid by customer will refund 50%
+print a.TicketCancellation(TOTALTICKETPRICE)
+Example : print a.TicketCancellation(400)
+Returns : 200
+
+--- Train ---
+
+Train
+Initialize
+create b:= new Train()
+
+Getting Total Fare Price by Fare Price * Ticket Quantity
+print b.GetTotalFarePrice(FarePrice,TicketQuantity)
+Example : print b.GetTotalFarePrice(200,2)
+Returns : 400
+
+Getting Travel Destination Price. Options <KL_to_Singapore> , <KL_to_Penang> , <KL_to_Ipoh>
+print b.GetDestinationPriceFare(TravelDestination)
+Example : print b.GetDestinationPriceFare(<KL_to_Singapore>)
+Returns : 200
+
+Getting Available Seats by Entering Total Seats Capacity for the Train and Total Reservations Made
+print b.GetSeatsAvailability(TotalSeats,TotalReservation)
+Example : print b.GetSeatsAvailability(200,150)
+Returns : 50
